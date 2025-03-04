@@ -1,0 +1,166 @@
+{% extends 'w.html' %}
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Efficiency Prediction</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type='text'], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #218838;
+        }
+        .result-box {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        .strengths, .weaknesses {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .strengths {
+            background: #d4edda;
+            color: #155724;
+        }
+        .weaknesses {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sleep Efficiency Prediction</h1>
+        <h2>Enter Your Details</h2>
+        <form action="{{ url_for('predictsleepeffecienct') }}" method="post">
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="text" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select name="gender">
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bedtime">Bedtime (HH:MM)</label>
+                <input type="text" name="bedtime" placeholder="e.g., 23:00" required>
+            </div>
+            <div class="form-group">
+                <label for="wakeup">Wake-up Time (HH:MM)</label>
+                <input type="text" name="wakeup" placeholder="e.g., 07:00" required>
+            </div>
+            <div class="form-group">
+                <label for="sleep_duration">Sleep Duration (minutes)</label>
+                <input type="text" name="sleep_duration" required>
+            </div>
+            <div class="form-group">
+                <label for="rem">REM Sleep Percentage</label>
+                <input type="text" name="rem" required>
+            </div>
+            <div class="form-group">
+                <label for="deep">Deep Sleep Percentage</label>
+                <input type="text" name="deep" required>
+            </div>
+            <div class="form-group">
+                <label for="light">Light Sleep Percentage</label>
+                <input type="text" name="light" required>
+            </div>
+            <div class="form-group">
+                <label for="awakenings">Number of Awakenings</label>
+                <input type="text" name="awakenings" required>
+            </div>
+            <div class="form-group">
+                <label for="caffeine">Caffeine Consumption</label>
+                <input type="text" name="caffeine" required>
+            </div>
+            <div class="form-group">
+                <label for="alcohol">Alcohol Consumption</label>
+                <input type="text" name="alcohol" required>
+            </div>
+            <div class="form-group">
+                <label for="smoking">Smoking Status</label>
+                <select name="smoking">
+                    <option value="0">Non-Smoker</option>
+                    <option value="1">Smoker</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exercise">Exercise Frequency</label>
+                <input type="text" name="exercise" required>
+            </div>
+            <button type="submit" class="btn">Predict</button>
+        </form>
+        {% if results %}
+            <div class="result-box">
+                <h2>Your Predicted Sleep Efficiency: {{ results }}%</h2>
+                {% if strengths %}
+                <div class="strengths">
+                    <h3>Strengths:</h3>
+                    <ul>
+                        {% for item in strengths %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% if weaknesses %}
+                <div class="weaknesses">
+                    <h3>Weaknesses:</h3>
+                    <ul>
+                        {% for item in weaknesses %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock body %}

@@ -3,6 +3,6 @@
 Flask
 numpy
 pandas
-scikit-learn==1.2.2
+scikit-learn
 Flask-SQLAlchmey
 Flask-Mail

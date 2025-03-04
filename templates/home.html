@@ -8,10 +8,10 @@
     <title>Login or Signup</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f3f4f6;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,63 +19,72 @@
         }
         .container {
             background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
             max-width: 400px;
             width: 100%;
-        }
-        .container h1 {
             text-align: center;
-            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .container:hover {
+            transform: scale(1.05);
+        }
+        h1 {
             color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            text-align: left;
         }
         .form-group label {
-            display: block;
             font-weight: bold;
-            margin-bottom: 5px;
             color: #555;
         }
         .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.3s;
         }
         .form-group input:focus {
-            border-color: #007BFF;
+            border-color: #764ba2;
             outline: none;
+            box-shadow: 0 0 8px rgba(118, 75, 162, 0.3);
         }
         .btn {
-            display: inline-block;
-            width: 48%;
-            padding: 10px;
-            background-color: #007BFF;
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
             color: white;
             text-align: center;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            text-decoration: none;
-            line-height: normal;
+        }
+        .btn.login {
+            background: #667eea;
         }
         .btn.signup {
-            background-color: #28a745;
+            background: #28a745;
         }
         .btn:hover {
             opacity: 0.9;
         }
         .divider {
-            text-align: center;
+            position: relative;
             margin: 20px 0;
             font-size: 14px;
             color: #aaa;
-            position: relative;
         }
         .divider::before, .divider::after {
             content: '';
@@ -95,17 +104,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome</h1>
+        <h1>Welcome Back!</h1>
+        <p style="color: #666;">Log in to access your account or sign up to get started.</p>
         <form>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email" >
+                <input type="email" id="email" placeholder="Enter your email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" >
+                <input type="password" id="password" placeholder="Enter your password" required>
             </div>
-            <!-- Buttons with links to different pages -->
             <a href="/dashboard" class="btn login">Login</a>
             <div class="divider">OR</div>
             <a href="/signup" class="btn signup">Sign Up</a>

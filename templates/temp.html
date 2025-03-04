@@ -1,0 +1,81 @@
+{% extends 'w.html' %}
+{% block body%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            background-color: beige;
+        }
+        h1{
+            font-size: 20px;
+         color:rgb(0, 0, 0);
+         text-align: center;
+        }
+        
+        
+      h2{
+         font-size: 20px;
+         color:rgb(0, 0, 0);
+         text-align: center;
+       }
+      #clname{
+        border:10px solid black;
+        padding :30px;
+        margin:20px 20px 20px 20px;
+       }
+      #clname2{
+        text-align: center;
+        position:relative;
+        top:20px;
+        left:3px;
+        border:10px solid black;
+
+       }
+       img{
+        position:relative;
+        width:190px;
+        height: 190px;
+        left:40%;
+        border:10px solid black;
+       }
+    </style>
+</head>
+<body>
+    <h1>Cement Strenght prediction</h1>
+    <h2>Please enter the below details :</h2>
+    <div id="clname">
+    <form action="{{url_for('hello_word')}}"method="post">
+        <p> do you take classes from school (1/0) :  <input type='text'  name ='school' required='required'/></p>
+        <p> ENTER YOUR gender (1-Male/0-Female):  <input type='text' name ='gender'  required='required'/></p>
+        <p> ENTER your parent status:  <input type='text' name ='parentstatus'  required='required'/></p>
+        <p> ENTER mother education:  <input type='text' name ='mothereducation' required='required'/></p>
+        <p> ENTER father education:  <input type='text' name ='fathereducation' required='required'/></p>
+        <p> ENTER mother job :<input type='text' name ='motherjob' required='required'/></p>
+        <p> ENTER father job :<input type='text' name ='fatherjob' required='required'/></p>
+        <p> ENTER your study time  :<input type='text' name ='studytime' required='required'/></p>
+        <p> ENTER your travel time  :<input type='text' name ='traveltime' required='required'/></p>
+        <p> ENTER Failures <input type='text' name ='failure' required='required'/></p>
+        <p> ENTER activities <input type='text' name ='activities' required='required'/></p>
+        <p> ENTER internet <input type='text' name ='internet' required='required'/></p>
+        <p> ENTER romantic <input type='text' name ='romantic' required='required'/></p>
+        <p> ENTER freetime <input type='text' name ='freetime' required='required'/></p>
+        <p> ENTER Walc <input type='text' name ='Walc' required='required'/></p>
+        <p> ENTER health <input type='text' name ='health' required='required'/></p>
+        <p> ENTER absences <input type='text' name ='absences' required='required'/></p>
+        <p> ENTER G1<input type='text' name ='G1' required='required'/></p>
+        <p> ENTER G2 <input type='text' name ='G2' required='required'/></p>
+        <button type ='submit'>Predict </button>
+     </form>
+     </div>
+     
+     <div id="clname2">
+    <p> YOUR FINAL SCORE MIGHT BE  = {{results}} FOLLOW YOUR DEEP ANALYSIS/p>
+   
+    </div>
+</body>
+</html>
+{% endblock body%}
