@@ -1,0 +1,161 @@
+{% extends 'w.html' %}
+{% block body%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cement Strength Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        #clname {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 600px;
+            background: #ffffff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        #clname2 {
+            text-align: center;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            max-width: 600px;
+            background: #ffffff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        form p {
+            margin: 15px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        form input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f9f9f9;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        form input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        #clname2 p {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Performance Prediction</h1>
+    <h2>Please enter the below details:</h2>
+    <div id="clname">
+        <form action="{{url_for('hello_word')}}" method="post">
+            <p>Do you take classes from school (1/0): <input type="text"  name="school" required></p>
+            <p>Enter your gender (1-Male/0-Female): <input type="text" name="gender"  required></p>
+            <p>Enter your parent status: <input type="text" name="parentstatus"  required></p>
+            <p>Enter mother education: <input type="text" name="mothereducation" required></p>
+            <p>Enter father education: <input type="text" name="fathereducation" required></p>
+            <p>Enter mother job: <input type="text" name="motherjob" required></p>
+            <p>Enter father job: <input type="text" name="fatherjob" required></p>
+            <p>Enter your study time: <input type="text" name="studytime" required></p>
+            <p>Enter your travel time: <input type="text" name="traveltime" required></p>
+            <p>Enter failures: <input type="text" name="failure" required></p>
+            <p>Enter activities: <input type="text" name="activities" required></p>
+            <p>Enter internet: <input type="text" name="internet" required></p>
+            <p>Enter angerissue: <input type="text" name="romantic" required></p>
+            <p>Enter freetime: <input type="text" name="freetime" required></p>
+            <p>Enter Walc: <input type="text" name="Walc" required></p>
+            <p>Enter health: <input type="text" name="health" required></p>
+            <p>Enter absences: <input type="text" name="absences" required></p>
+            <p>Enter G1: <input type="text" name="G1" required></p>
+            <p>Enter G2: <input type="text" name="G2" required></p>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+    
+    <div id="clname2">
+        <p>Your final score might be = {{results}} Follow your deep analysis.</p>
+    </div>
+</body>
+</html>
+{% endblock body%}

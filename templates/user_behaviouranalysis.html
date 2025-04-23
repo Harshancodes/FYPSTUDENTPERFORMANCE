@@ -1,0 +1,168 @@
+{% extends 'w.html' %}
+{% block body %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Behavior Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: 
+                linear-gradient(rgba(223, 246, 255, 0.95), rgba(163, 206, 241, 0.95)),
+                url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 30px;
+            border-radius: 20px;
+            border: 7px solid;
+            border-image: linear-gradient(90deg, #007bff, #00c2ff, #007bff);
+            border-image-slice: 1;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            animation: borderShift 5s linear infinite;
+        }
+
+        @keyframes borderShift {
+            0% { border-image-source: linear-gradient(90deg, #007bff, #00c2ff, #007bff); }
+            50% { border-image-source: linear-gradient(90deg, #00c2ff, #007bff, #00c2ff); }
+            100% { border-image-source: linear-gradient(90deg, #007bff, #00c2ff, #007bff); }
+        }
+
+        h2.title {
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            color: #003366;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: 600;
+            text-align: left;
+        }
+
+        input, select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            background: #f0f9ff;
+            border-left: 5px solid #007bff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+
+        .strength {
+            color: green;
+            font-weight: bold;
+        }
+
+        .weakness {
+            color: red;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h2.title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="title">📱 User Behavior Prediction</h2>
+        <form method="POST">
+            <label>📊 App Usage Time (min/day):</label>
+            <input type="number" name="app_usage" required>
+
+            <label>🕒 Screen On Time (hours/day):</label>
+            <input type="number" name="screen_time" step="0.1" required>
+
+            <label>🔋 Battery Drain (mAh/day):</label>
+            <input type="number" name="battery_drain" required>
+
+            <label>📱 Number of Installed Apps:</label>
+            <input type="number" name="num_apps" required>
+
+            <label>📶 Data Usage (MB/day):</label>
+            <input type="number" name="data_usage" required>
+
+            <label>🎂 Age:</label>
+            <input type="number" name="age" required>
+
+            <label>🚻 Gender:</label>
+            <select name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+            <input type="submit" value="🔍 Predict">
+        </form>
+
+        {% if category %}
+        <div class="result">
+            <h2>🔮 Predicted User Behavior: <span style="color: #007bff;">{{ category }}</span></h2>
+
+            <h3 class="strength">🌟 Strengths:</h3>
+            <p>{{ analysis["Strength"] }}</p>
+
+            <h3 class="weakness">⚠️ Weaknesses:</h3>
+            <p>{{ analysis["Weakness"] }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+{% endblock body %}

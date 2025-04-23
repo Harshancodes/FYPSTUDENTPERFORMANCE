@@ -1,0 +1,176 @@
+{% extends 'w.html' %}
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #cfd9df);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        #clname {
+    border: 2px solid rgba(0, 0, 0, 0.2); /* Swalpa stylish border */
+    border-radius: 20px;
+    padding: 40px;
+    margin: 30px auto;
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+
+        form p {
+            margin: 15px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        form input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #42a5f5, #1e88e5);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #1e88e5, #42a5f5);
+        }
+
+        #clname2 {
+    text-align: center;
+    margin: 40px auto;
+    max-width: 700px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    border: 8px solid rgba(0, 0, 0, 0.166);  /* Swalpa darker border */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+}
+
+
+        .result-celebration {
+            text-align: center;
+            font-size: 24px;
+            color: #2c3e50;
+            font-weight: bold;
+            animation: popIn 1s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .score-text {
+            font-size: 22px;
+            margin: 10px 0;
+            color: #34495e;
+        }
+
+        .score-number {
+            font-size: 32px;
+            color: #007bff;
+            margin: 10px 0;
+        }
+
+        .score-footer {
+            font-size: 18px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="clname">
+        <h1>🎓 Student Performance Prediction</h1>
+        <h2>📝 Please enter the below details:</h2>
+        <form action="{{url_for('hello_word') }}" method="post">
+            <p>🏫 Do you take classes from school (1/0): <input type="text" name="school" required></p>
+            <p>🚻 Enter your gender (1-Male/0-Female): <input type="text" name="gender" required></p>
+            <p>👨‍👩‍👧‍👦 Enter your parent status: <input type="text" name="parentstatus" required></p>
+            <p>👩‍🎓 Enter mother education: <input type="text" name="mothereducation" required></p>
+            <p>👨‍🎓 Enter father education: <input type="text" name="fathereducation" required></p>
+            <p>👩‍💼 Enter mother job: <input type="text" name="motherjob" required></p>
+            <p>👨‍💼 Enter father job: <input type="text" name="fatherjob" required></p>
+            <p>📚 Enter your study time: <input type="text" name="studytime" required></p>
+            <p>🚌 Enter your travel time: <input type="text" name="traveltime" required></p>
+            <p>❌ Enter failures: <input type="text" name="failure" required></p>
+            <p>🏃‍♂️ Enter activities: <input type="text" name="activities" required></p>
+            <p>🌐 Enter internet: <input type="text" name="internet" required></p>
+        <!--    <p>💘 Enter romantic: <input type="text" name="romantic" required></p> --->
+            <p>🕒 Enter freetime: <input type="text" name="freetime" required></p>
+         <!---   <p>🍷 Enter Walc: <input type="text" name="Walc" required></p>-->
+            <p>💪 Enter health: <input type="text" name="health" required></p>
+            <p>📆 Enter absences: <input type="text" name="absences" required></p>
+            <p>📈 Enter G1: <input type="text" name="G1" required></p>
+            <p>📊 Enter G2: <input type="text" name="G2" required></p>
+            <button type="submit">🚀 Predict</button>
+        </form>
+    </div>
+
+    <div id="clname2">
+        <div class="result-celebration">
+            🎉🥳 <strong>Hurray!!!</strong> 🥳🎉<br>
+            <span class="score-text">Your predicted final score is:</span><br>
+            <span class="score-number">🎊 {{ results }} 🎊</span><br>
+            <span class="score-footer">Keep going champ! 🚀📚</span>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock body %}

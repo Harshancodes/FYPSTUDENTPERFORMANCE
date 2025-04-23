@@ -1,0 +1,15 @@
+<!-- templates/users.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Users</title>
+</head>
+<body>
+    <h1>List of Users</h1>
+    <ul>
+        {% for user in users %}
+            <li>ID: {{ user.id }} | Username: {{ user.username }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

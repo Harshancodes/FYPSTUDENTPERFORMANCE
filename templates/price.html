@@ -1,0 +1,65 @@
+{% extends 'w.html' %}
+{% block body%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe to Plus Membership</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        input[type="text"], input[type="email"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .subscribe-btn {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .subscribe-btn:hover {
+            background-color: #e68900;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Subscribe to Plus Membership</h2>
+        <p>Get access to premium features and exclusive content.</p>
+        <form action="/subscribe" method="POST">
+            <input type="text" name="name" placeholder="Enter your name" required><br>
+            <input type="email" name="email" placeholder="Enter your email" required><br>
+            <button type="submit" class="subscribe-btn">Subscribe Now</button>
+        </form>
+    </div>
+</body>
+</html>
+{% endblock body%}

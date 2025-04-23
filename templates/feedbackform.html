@@ -1,0 +1,181 @@
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📝 Feedback Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #dfe9f3, #ffffff);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 25px;
+      border: 2px solid #ccc;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .rating {
+      display: flex;
+      justify-content: space-between;
+      max-width: 200px;
+      margin-top: 5px;
+    }
+
+    .rating input {
+      display: none;
+    }
+
+    .rating label {
+      font-size: 2em;
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    .rating input:checked ~ label,
+    .rating input:checked + label {
+      color: #f9a825;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .thank-you-message {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 18px;
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .rating {
+        justify-content: space-around;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Feedback Form</h1>
+    <form id="feedback-form">
+      <div class="form-group">
+        <label for="name">👤 Name:</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">📧 Email:</label>
+        <input type="email" id="email" name="email" placeholder="Your email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="feedback">💬 Feedback:</label>
+        <textarea id="feedback" name="feedback" rows="4" placeholder="Write your feedback here..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="rating">⭐ Rating:</label>
+        <div class="rating">
+          <input type="radio" id="star5" name="rating" value="5" />
+          <label for="star5" title="5 stars">★</label>
+          <input type="radio" id="star4" name="rating" value="4" />
+          <label for="star4" title="4 stars">★</label>
+          <input type="radio" id="star3" name="rating" value="3" />
+          <label for="star3" title="3 stars">★</label>
+          <input type="radio" id="star2" name="rating" value="2" />
+          <label for="star2" title="2 stars">★</label>
+          <input type="radio" id="star1" name="rating" value="1" />
+          <label for="star1" title="1 star">★</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="emergency-contact">📞 Emergency Contact:</label>
+        <input type="text" id="emergency-contact" name="emergency-contact" placeholder="Contact name" required />
+        <br><br>
+        <input type="tel" id="emergency-phone" name="emergency-phone" placeholder="Phone number" required />
+      </div>
+
+      <button type="submit">🚀 Submit</button>
+    </form>
+    <div id="thank-you" class="thank-you-message" style="display: none;"></div>
+  </div>
+
+  <script>
+    document.getElementById("feedback-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      this.reset();
+
+      const thankYouDiv = document.getElementById("thank-you");
+      thankYouDiv.textContent = "🎉 Thank you for your feedback!";
+      thankYouDiv.style.display = "block";
+
+      setTimeout(() => {
+        thankYouDiv.style.display = "none";
+      }, 4000);
+    });
+  </script>
+</body>
+</html>
+{% endblock body %}

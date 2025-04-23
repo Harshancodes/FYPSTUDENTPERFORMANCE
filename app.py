@@ -1,0 +1,370 @@
+from flask import Flask,request,jsonify,render_template,redirect,url_for,flash,session
+from model import db, User, UserProfile  
+import os
+import pickle
+import numpy as np
+import pandas as pd
+from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
+from flask_mail import Mail, Message
+
+
+
+#flask\models\rfr_model.pkl
+
+application= Flask(__name__)
+app=Flask(__name__)
+m1=pickle.load(open('models/rfr_model.pkl','rb'))
+sleep_model=pickle.load(open('models/sm.pkl','rb'))
+userbehaviormodel=pickle.load(open('models/userbehavior.pkl','rb'))
+app.secret_key = 'super_secret_key'
+
+# Ensure 'instance/' folder exists
+if not os.path.exists('instance'):
+    os.makedirs('instance')
+
+# Database config
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
+# Create tables
+with app.app_context():
+    db.create_all()
+@app.route("/")
+def welcome():
+    return render_template("w.html")
+
+def check_password(a,b):
+    if a==b:
+        return 1
+    else:
+        return 0
+@app.route("/home", methods=['GET', 'POST'])
+def homeb():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = User.query.filter_by(username=username, password=password).first()
+        if user :
+            session['uname'] = user.username
+            return redirect(url_for('dashboard'))
+          #  return f"Welcome, {username}!"
+        else:
+            flash('Invalid username or password.')
+            return redirect(url_for('homeb'))
+
+    return render_template("home.html")
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists. Please login or use another.')
+            return redirect(url_for('homeb'))
+
+        new_user = User(username=username, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        n_u=UserProfile(username=username)
+        db.session.add(n_u)
+        db.session.commit()
+        flash('Signup successful! Please log in.')
+        return redirect(url_for('homeb'))
+
+    return render_template('signup.html')
+
+@app.route('/users')
+def show_users():
+    users = User.query.all()
+    return render_template('users.html', users=users)
+
+
+@app.route('/usersprofile')
+def show_users_profile():
+    users = UserProfile.query.all()
+    return render_template('userprofile.html', users=users)
+
+# @app.route("/login")
+# def login():
+#     return render_template("login.html")
+
+
+
+@app.route("/knm")
+def knm():
+    return render_template("knm.html")
+
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+
+
+@app.route("/feedback")
+def feedback():
+    return render_template("feedbackform.html")
+
+
+@app.route("/price")
+def price():
+    return render_template("price.html")
+
+
+@app.route("/pred",methods=["GET","POST"])
+def hello_word():
+    if request.method=='POST':
+        school=float(request.form.get('school'))
+        gender=float(request.form.get('gender'))
+        parentstatus=float(request.form.get('parentstatus'))
+        mothereducation=float(request.form.get('mothereducation'))
+        fathereducation=float(request.form.get('fathereducation'))
+        motherjob=float(request.form.get('motherjob'))
+        fatherjob=float(request.form.get('fatherjob'))
+        traveltime=float(request.form.get('traveltime'))
+        studytime=float(request.form.get('studytime'))
+        failure=float(request.form.get('failure'))
+        activities=float(request.form.get('activities'))
+        internet=float(request.form.get('internet'))
+        #romantic=float(request.form.get('romantic'))
+        romantic=0
+        freetime=float(request.form.get('freetime'))
+        #Walc=float(request.form.get('Walc'))
+        Walc=0
+        health=float(request.form.get('health'))
+        absences=float(request.form.get('absences'))
+        G1=float(request.form.get('G1'))
+        G2=float(request.form.get('G2'))
+        result=m1.predict([[ school, gender,parentstatus,mothereducation,fathereducation,motherjob,fatherjob,traveltime,studytime, failure,activities,internet,romantic,freetime,Walc,health,absences,G1,G2]])
+        if(result<0):
+           result=-result
+        username = session.get('uname')
+        if username:
+            user = UserProfile.query.filter_by(username=username).first()
+            if user:
+                # Update something for this user
+                user.performance = result[0]
+                db.session.commit()
+        return render_template('student_performance.html',results=result[0])
+
+    else:
+        return render_template('student_performance.html')
+    
+
+
+###################################################################
+# Function to analyze strengths and weaknesses
+# def analyze_sleep_efficiency(features, model):
+#     prediction = sleep_model.predict([features])[0]
+    
+#     strengths = []
+#     weaknesses = []
+    
+#     if features[3] >= 420:
+#         strengths.append("Adequate time in bed")
+#     else:
+#         weaknesses.append("Not enough time in bed")
+    
+#     if 6 <= features[4] <= 8:
+#         strengths.append("Consistent wake-up time")
+#     else:
+#         weaknesses.append("Irregular wake-up time")
+    
+#     if features[12] == 1:
+#         weaknesses.append("Smoking may affect sleep efficiency")
+#     else:
+#         strengths.append("Non-smoker, good for sleep efficiency")
+    
+#     return prediction, strengths, weaknesses
+
+# @app.route('/predictsleepeffecienct', methods=['GET', 'POST'])
+# def predictsleepeffecienct():
+#     if request.method == 'POST':
+#         try:
+#             bedtime = float(request.form.get('Bedtime'))
+#             wakeup_time = float(request.form.get('WakeupTime'))
+#             total_minutes_in_bed = float(request.form.get('TotalMinutesInBed'))
+#             smoking_status = int(request.form.get('SmokingStatus'))
+#             gender = int(request.form.get('Gender'))
+
+#             features = [bedtime, wakeup_time, total_minutes_in_bed, smoking_status, gender]
+#             prediction, strengths, weaknesses = analyze_sleep_efficiency(features, sleep_model)
+            
+#             return render_template('sleep_result.html', prediction=prediction, strengths=strengths, weaknesses=weaknesses)
+#         except Exception as e:
+#             return f"Error: {str(e)}"
+    
+#     return render_template('sleepefficieny.html')
+
+
+
+def analyze_sleep_efficiency(features, model):
+    prediction = model.predict([features])[0]
+    strengths = []
+    weaknesses = []
+
+    age, gender, bedtime, wakeup, sleep_duration, rem, deep, light, awakenings, caffeine, alcohol, smoking, exercise = features
+    
+    # Analyze strengths
+    if sleep_duration >= 420:
+        strengths.append("Adequate sleep duration")
+    if rem >= 20:
+        strengths.append("Healthy REM sleep percentage")
+    if deep >= 15:
+        strengths.append("Good deep sleep percentage")
+    if awakenings <= 2:
+        strengths.append("Minimal awakenings during sleep")
+    if exercise >= 3:
+        strengths.append("Regular exercise routine")
+    
+    # Analyze weaknesses
+    if sleep_duration < 360:
+        weaknesses.append("Insufficient sleep duration")
+    if rem < 15:
+        weaknesses.append("Low REM sleep percentage")
+    if deep < 10:
+        weaknesses.append("Low deep sleep percentage")
+    if awakenings > 4:
+        weaknesses.append("Frequent awakenings during sleep")
+    if caffeine > 2:
+        weaknesses.append("High caffeine consumption may affect sleep")
+    if alcohol > 2:
+        weaknesses.append("Excessive alcohol consumption can disrupt sleep")
+    if smoking == 1:
+        weaknesses.append("Smoking may negatively impact sleep quality")
+    if exercise < 2:
+        weaknesses.append("Low physical activity may reduce sleep efficiency")
+    username = session.get('uname')
+    if username:
+        user = UserProfile.query.filter_by(username=username).first()
+        if user:
+                # Update something for this user
+            user.sleep = round(prediction * 100, 2)
+            db.session.commit()
+    return round(prediction * 100, 2), strengths, weaknesses
+
+@app.route('/predictsleepeffecienct', methods=['GET', 'POST'])
+def predictsleepeffecienct():
+    if request.method == 'POST':
+        try:
+            age = int(request.form.get('age'))
+            gender = int(request.form.get('gender'))
+            bedtime = request.form.get('bedtime')
+            wakeup = request.form.get('wakeup')
+            sleep_duration = int(request.form.get('sleep_duration'))
+            rem = float(request.form.get('rem'))
+            deep = float(request.form.get('deep'))
+            light = float(request.form.get('light'))
+            awakenings = int(request.form.get('awakenings'))
+            caffeine = int(request.form.get('caffeine'))
+            alcohol = int(request.form.get('alcohol'))
+            smoking = int(request.form.get('smoking'))
+            exercise = int(request.form.get('exercise'))
+            
+            # Convert bedtime and wakeup time to minutes
+            bedtime_hr, bedtime_min = map(int, bedtime.split(':'))
+            wakeup_hr, wakeup_min = map(int, wakeup.split(':'))
+            bedtime_in_minutes = bedtime_hr * 60 + bedtime_min
+            wakeup_in_minutes = wakeup_hr * 60 + wakeup_min
+            
+            features = [age, gender, bedtime_in_minutes, wakeup_in_minutes, sleep_duration, rem, deep, light, awakenings, caffeine, alcohol, smoking, exercise]
+            prediction, strengths, weaknesses = analyze_sleep_efficiency(features, sleep_model)
+            
+            return render_template('sleepefficieny.html', results=prediction, strengths=strengths, weaknesses=weaknesses)
+        except Exception as e:
+            return f"Error: {str(e)}"
+    
+    return render_template('sleepefficieny.html')
+def analyze_behavior(features):
+    analysis = {"Strength": "No major strengths detected.", "Weakness": "No major weaknesses detected."}
+    
+    if features["App Usage Time (min/day)"] > 300:
+        analysis["Strength"] = "Highly engaged with mobile apps, good at digital interaction."
+        analysis["Weakness"] = "Excessive screen time might impact productivity or sleep."
+    elif features["App Usage Time (min/day)"] < 100:
+        analysis["Strength"] = "Minimal phone usage, better time management."
+        analysis["Weakness"] = "May struggle with digital adaptation in tech-heavy tasks."
+
+    if features["Battery Drain (mAh/day)"] > 1500:
+        analysis["Weakness"] = "High battery drain suggests heavy usage, possibly inefficient apps."
+    
+    return analysis
+
+
+# Flask route for prediction
+@app.route("/userbehavior", methods=["GET", "POST"])
+def userbehavior():
+    predicted_category = None
+    analysis = None
+
+    if request.method == "POST":
+        # Extract input data
+        input_data = {
+            "App Usage Time (min/day)": float(request.form["app_usage"]),
+            "Screen On Time (hours/day)": float(request.form["screen_time"]),
+            "Battery Drain (mAh/day)": float(request.form["battery_drain"]),
+            "Number of Apps Installed": int(request.form["num_apps"]),
+            "Data Usage (MB/day)": float(request.form["data_usage"]),
+            "Age": int(request.form["age"]),
+            "Gender": 1 if request.form["gender"] == "Male" else 0  # Encoding Gender
+        }
+
+        # Convert input to DataFrame for model
+        input_df = pd.DataFrame([input_data])
+
+        # Make prediction
+        raw_pred = userbehaviormodel.predict(input_df)[0]
+        if hasattr(raw_pred, "item"):
+            predicted_category = raw_pred.item()
+
+# If it's bytes (like in your example), decode manually
+        elif isinstance(raw_pred, bytes):
+            import struct
+            predicted_category = struct.unpack("<Q", raw_pred)[0]  # Little-endian unsigned long long
+
+        else:
+            predicted_category = raw_pred
+        username = session.get('uname')
+        if username:
+            user = UserProfile.query.filter_by(username=username).first()
+            if user:
+                # Update something for this user
+                user.behaviour = predicted_category
+                db.session.commit()
+        # Analyze strengths & weaknesses
+        
+        analysis = analyze_behavior(input_data)
+
+    return render_template("user_behaviouranalysis.html", category=predicted_category, analysis=analysis)
+
+
+@app.route('/api/profile', methods=['GET'])
+def get_profile():
+    username = session.get('uname')
+    if not username:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    user = UserProfile.query.filter_by(username=username).first()
+    if user:
+        return jsonify({
+            "username": user.username,
+            "performance": user.performance,
+            "sleep": user.sleep,
+            "behaviour": user.behaviour
+        })
+    return jsonify({"error": "User not found"}), 404
+
+@app.route('/userprofile')
+def user_profile_page():
+    return render_template('user_profile.html')
+
+
+
+
+
+if __name__=="__main__":
+    app.run(host="0.0.0.0",port=5001,debug=True)

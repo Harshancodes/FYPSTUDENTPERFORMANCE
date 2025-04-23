@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Main Dashboard 🌐</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f4f9ff;
+      --text-light: #333;
+      --card-bg-light: rgba(255, 255, 255, 0.6);
+
+      --bg-dark: #1e1e2f;
+      --text-dark: #f1f1f1;
+      --card-bg-dark: rgba(40, 40, 60, 0.6);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(-45deg, #d3cce3, #e9e4f0, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      transition: 0.4s;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .main {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-light);
+    }
+
+    body.dark .main {
+      color: var(--text-dark);
+    }
+
+    .dark-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
+      max-width: 1000px;
+      margin: 30px auto;
+    }
+
+    .card {
+      background: var(--card-bg-light);
+      padding: 30px 20px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    body.dark .card {
+      background: var(--card-bg-dark);
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .card i {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: #667eea;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .animated-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      animation: floatIn 2s ease-out forwards, pulse 2.5s infinite;
+      opacity: 0;
+      margin-bottom: 10px;
+    }
+
+    @keyframes floatIn {
+      0% {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        text-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
+      }
+      50% {
+        text-shadow: 0 0 20px rgba(102, 126, 234, 1);
+      }
+    }
+
+    .motivational-quote {
+      font-size: 1rem;
+      font-style: italic;
+      margin: 5px 0 20px;
+      color: #4b5563;
+    }
+
+    body.dark .motivational-quote {
+      color: #cbd5e1;
+    }
+
+    .username-display {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #6b7280;
+    }
+
+    body.dark .username-display {
+      color: #d1d5db;
+    }
+
+    .mascot {
+      position: fixed;
+      bottom: 40px;
+      right: 30px;
+      font-size: 40px;
+      animation: float 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dark-toggle" onclick="toggleDarkMode()">🌙</div>
+
+  <div class="main">
+    <div class="animated-title">🎓📊 Beyond Grades</div>
+    <div class="username-display" id="username-display">Hello, <strong>Student</strong>!</div>
+    <h2>🚀 Welcome to Your App Dashboard</h2>
+    <p class="motivational-quote">"Success is the sum of small efforts, repeated day in and day out." 💡</p>
+
+    <div class="grid">
+      <a href="/home">
+        <div class="card"><i class="fas fa-sign-in-alt"></i><p>Login</p></div>
+      </a>
+      <a href="/home">
+        <div class="card"><i class="fas fa-user-plus"></i><p>Signup</p></div>
+      </a>
+      <a href="/dashboard">
+        <div class="card"><i class="fas fa-tachometer-alt"></i><p>Dashboard</p></div>
+      </a>
+      <!-- <a href="/inventory">
+        <div class="card"><i class="fas fa-boxes"></i><p>Inventory</p></div>
+      </a> -->
+      <a href="/analytics">
+        <div class="card"><i class="fas fa-chart-line"></i><p>Analytics</p></div>
+      </a>
+      <a href="/userprofile">
+        <div class="card"><i class="fas fa-user-circle"></i><p>User Profile</p></div>
+      </a>
+      <a href="/userbehavior">
+        <div class="card"><i class="fas fa-brain"></i><p>User Behavior Prediction</p></div>
+      </a>
+      <a href="/predictsleepeffecienct">
+        <div class="card"><i class="fas fa-bed"></i><p>Sleep Efficiency Prediction</p></div>
+      </a>
+      <a href="/pred">
+        <div class="card"><i class="fas fa-pen-nib"></i><p>Student Performance</p></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Animated Mascot -->
+  <div class="mascot">🤖</div>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    // Simulate user login (set this from login page)
+    // localStorage.setItem("username", "Virat"); // <- Uncomment this line in login flow
+
+    // Display username if exists
+    const username = localStorage.getItem("username") || "Student";
+    document.getElementById("username-display").innerHTML = Hello, <strong>${username}</strong>!;
+  </script>
+</body>
+</html>

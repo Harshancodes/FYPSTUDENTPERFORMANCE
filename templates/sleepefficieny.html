@@ -1,0 +1,273 @@
+{% extends 'w.html' %}
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Efficiency Prediction</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .container {
+      width: 50%;
+      margin: auto;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      margin-top: 30px;
+      background: white;
+      border: 2px solid #b39ddb;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    input[type='text'], input[type='time'], select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #6a1b9a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: #4a148c;
+    }
+    .result-box {
+      margin-top: 30px;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 15px;
+      border: 2px solid #81d4fa;
+      animation: fadeIn 1s ease;
+    }
+    .strengths, .weaknesses {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      animation: fadeSlide 0.5s ease forwards;
+    }
+    .strengths {
+      background: #d4edda;
+      color: #155724;
+    }
+    .weaknesses {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .strengths li, .weaknesses li {
+      opacity: 0;
+      animation: typeFade 0.5s ease forwards;
+      animation-delay: calc(var(--i) * 0.3s);
+    }
+    @keyframes typeFade {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .gauge {
+      width: 200px;
+      height: 100px;
+      position: relative;
+      margin: 20px auto;
+      overflow: hidden;
+    }
+    .gauge::before {
+      content: '';
+      width: 200px;
+      height: 100px;
+      border: 20px solid #f3f3f3;
+      border-bottom: none;
+      border-radius: 100px 100px 0 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-sizing: border-box;
+    }
+    .gauge .arc {
+      width: 200px;
+      height: 100px;
+      border: 20px solid;
+      border-bottom: none;
+      border-radius: 100px 100px 0 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-sizing: border-box;
+      transform-origin: 50% 100%;
+      transition: transform 1s ease, border-color 1s ease;
+    }
+    .gauge .arc[data-efficiency="high"] { border-color: #28a745; }
+    .gauge .arc[data-efficiency="good"] { border-color: #90ee90; }
+    .gauge .arc[data-efficiency="medium"] { border-color: #ffd700; }
+    .gauge .arc[data-efficiency="low"] { border-color: #dc3545; }
+    .gauge .needle {
+      width: 4px;
+      height: 50px;
+      background: #333;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform-origin: 50% 100%;
+      transition: transform 1s ease;
+    }
+    .gauge .labels {
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 14px;
+      color: #333;
+    }
+    @media screen and (max-width: 600px) {
+      .container {
+        width: 90%;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💤 Sleep Efficiency Prediction</h1>
+    <h2>📋 Enter Your Details</h2>
+    <form action="{{ url_for('predictsleepeffecienct') }}" method="post">
+      <div class="form-group">
+        <label><i class="fa-solid fa-user"></i> Age</label>
+        <input type="text" name="age" required>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-venus-mars"></i> Gender</label>
+        <select name="gender" required>
+          <option disabled selected value="">Select Gender</option>
+          <option value="0">Male</option>
+          <option value="1">Female</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-bed"></i> Bedtime</label>
+        <input type="time" name="bedtime" required>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-clock"></i> Wake-up Time</label>
+        <input type="time" name="wakeup" required>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-hourglass-half"></i> Sleep Duration (minutes)</label>
+        <input type="text" name="sleep_duration" required>
+      </div>
+      <div class="form-group">
+        <label>🧠 REM Sleep %</label>
+        <input type="text" name="rem" required>
+      </div>
+      <div class="form-group">
+        <label>🌑 Deep Sleep %</label>
+        <input type="text" name="deep" required>
+      </div>
+      <div class="form-group">
+        <label>💡 Light Sleep %</label>
+        <input type="text" name="light" required>
+      </div>
+      <div class="form-group">
+        <label>😴 Awakenings</label>
+        <input type="text" name="awakenings" required>
+      </div>
+      <div class="form-group">
+        <label>☕ Caffeine (cups/day)</label>
+        <input type="text" name="caffeine" required>
+      </div>
+      <div class="form-group">
+        <label>🍷 Alcohol (drinks/week)</label>
+        <input type="text" name="alcohol" required>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-smoking"></i> Smoking Status</label>
+        <select name="smoking" required>
+          <option disabled selected value="">Select Status</option>
+          <option value="0">Non-Smoker</option>
+          <option value="1">Smoker</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>🏃 Exercise Frequency (per week)</label>
+        <input type="text" name="exercise" required>
+      </div>
+      <button type="submit" class="btn">🔍 Predict</button>
+    </form>
+  </div>
+
+  {% if results %}
+  {% set efficiency_level = "high" if results >= 90 else "good" if results >= 80 else "medium" if results >= 70 else "low" %}
+  {% set angle = results * 1.8 - 90 %}
+  <div class="container result-box">
+    <h2>Your Predicted Sleep Efficiency</h2>
+    <div class="gauge">
+      <div class="arc" data-efficiency="{{ efficiency_level }}" style="transform: rotate({{ angle }}deg);"></div>
+      <div class="needle" style="transform: rotate({{ angle }}deg);"></div>
+      <div class="labels">0% | 50% | 100%</div>
+    </div>
+    <h3>{{ results }}%</h3>
+    {% if strengths %}
+    <div class="strengths">
+      <h3>✅ Strengths:</h3>
+      <ul>
+        {% for item in strengths %}
+          <li style="--i: {{ loop.index }}">{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    {% if weaknesses %}
+    <div class="weaknesses">
+      <h3>⚠️ Weaknesses:</h3>
+      <ul>
+        {% for item in weaknesses %}
+          <li style="--i: {{ loop.index }}">{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+</body>
+</html>
+{% endblock body %}

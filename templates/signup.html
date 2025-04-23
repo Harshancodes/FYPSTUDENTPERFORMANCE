@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h2 {
+            color: #ff4081;
+            font-size: 36px;
+        }
+
+        form {
+            background-color: #fff3e6;
+            border: 3px dashed #ffa07a;
+            padding: 30px;
+            display: inline-block;
+            border-radius: 20px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            width: 250px;
+            border: 2px solid #ffb6c1;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #ff69b4;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #ff1493;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            color: red;
+            font-size: 16px;
+        }
+
+        a {
+            color: #0077cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h2>🎉 Signup</h2>
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li>⚠️ {{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Username:<br>
+            <input type="text" name="username" required>
+        </label><br>
+        <label>Password:<br>
+            <input type="password" name="password" required>
+        </label><br><br>
+        <input type="submit" value="Sign Me Up! 🚀">
+    </form>
+
+    <p>Already have an account? <a href="{{ url_for('homeb') }}">Go to Login 🔐</a></p>
+</body>
+</html>

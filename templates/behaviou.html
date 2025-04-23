@@ -1,0 +1,122 @@
+{% extends 'w.html' %}
+{% block body%}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Behavior Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background: white;
+            width: 50%;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input, select {
+            width: 80%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            background: #e9f5ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .strength {
+            color: green;
+            font-weight: bold;
+        }
+
+        .weakness {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User Behavior Prediction</h2>
+        <form method="POST">
+            <label>App Usage Time (min/day):</label>
+            <input type="number" name="app_usage" required>
+
+            <label>Screen On Time (hours/day):</label>
+            <input type="number" name="screen_time" step="0.1" required>
+
+            <label>Battery Drain (mAh/day):</label>
+            <input type="number" name="battery_drain" required>
+
+            <label>Number of Installed Apps:</label>
+            <input type="number" name="num_apps" required>
+
+            <label>Data Usage (MB/day):</label>
+            <input type="number" name="data_usage" required>
+
+            <label>Age:</label>
+            <input type="number" name="age" required>
+
+            <label>Gender:</label>
+            <select name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+            <input type="submit" value="Predict">
+        </form>
+
+        {% if category %}
+        <div class="result">
+            <h2>Predicted User Behavior: <span style="color: #007bff;">{{ category }}</span></h2>
+            
+            <h3 class="strength">Strengths:</h3>
+            <p>{{ analysis["Strength"] }}</p>
+
+            <h3 class="weakness">Weaknesses:</h3>
+            <p>{{ analysis["Weakness"] }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+{% endblock body %}
