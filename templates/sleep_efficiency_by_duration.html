@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌙 Sleep Duration vs. Sleep Efficiency</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      font-weight: 600;
+      color: #2f4f4f;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    #chart-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-header {
+      font-size: 1.8em;
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #3b4d4f;
+    }
+
+    .info-text {
+      font-size: 1.2em;
+      color: #4e5b5f;
+      margin-top: 15px;
+    }
+
+    .info-text p {
+      margin-bottom: 10px;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 1.1em;
+      color: #555;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: #4a90e2;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌙 Sleep Duration vs. Sleep Efficiency</h1>
+  
+  <div id="chart-container">
+    <div class="chart-header">📊 Average Sleep Efficiency by Sleep Duration</div>
+    <canvas id="barChart"></canvas>
+    <div class="info-text">
+      <p><strong>Note:</strong> This chart compares sleep duration (in hours) with average sleep efficiency (scaled from 0 to 1).</p>
+      <p>Efficiencies for selected sleep durations (5, 6, 7, 8, 9, 10 hours) have been adjusted for better accuracy.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>Made with 💻 by <a href="https://www.yourportfolio.com" target="_blank">Your Name</a></p>
+  </footer>
+
+  <script>
+    const durations = {{ durations | tojson }};
+    const efficiencies = {{ efficiencies | tojson }};
+
+    new Chart(document.getElementById('barChart'), {
+      type: 'bar',
+      data: {
+        labels: durations.map(d => d + " hrs"),
+        datasets: [{
+          label: 'Avg Sleep Efficiency',
+          data: efficiencies,
+          backgroundColor: 'rgba(75, 192, 192, 0.7)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+          borderRadius: 8,
+          hoverBackgroundColor: 'rgba(75, 192, 192, 0.9)',
+          hoverBorderColor: 'rgba(75, 192, 192, 1)',
+          hoverBorderWidth: 2,
+          hoverRadius: 12,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'Sleep Duration vs Avg Efficiency',
+            font: { size: 20, weight: 'bold' },
+            color: '#333'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 1,
+            title: {
+              display: true,
+              text: 'Efficiency (0-1)',
+              font: { size: 16, weight: '600' },
+              color: '#2f4f4f'
+            },
+            grid: {
+              color: '#ddd',
+              borderColor: '#ccc'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Sleep Duration (hours)',
+              font: { size: 16, weight: '600' },
+              color: '#2f4f4f'
+            },
+            grid: {
+              color: '#ddd',
+              borderColor: '#ccc'
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

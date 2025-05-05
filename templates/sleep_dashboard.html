@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sleep Efficiency Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2f6fa;
+            padding: 2rem;
+        }
+        .chart-box {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-box">
+        <h2>🛌 Sleep Efficiency Comparison</h2>
+        <canvas id="comparisonChart" height="150"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('comparisonChart').getContext('2d');
+        const comparisonChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Community Average', 'Your Sleep'],
+                datasets: [{
+                    label: 'Sleep Efficiency (%)',
+                    data: [{{ average_efficiency }}, {{ user_efficiency }}],
+                    backgroundColor: ['#ff6384', '#36a2eb'],
+                    borderRadius: 10,
+                    barThickness: 60
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Efficiency (%)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw + '% Sleep Efficiency';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

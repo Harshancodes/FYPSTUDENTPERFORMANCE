@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌈 Fun Student Analytics</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Comic Neue', cursive;
+      background: linear-gradient(to right, #FFDEE9, #B5FFFC);
+      margin: 0;
+      padding: 0;
+      color: #333;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .dark-mode {
+      background: #121212;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff4081;
+      font-size: 2.8em;
+      margin-bottom: 20px;
+    }
+
+    .toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff4081;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      background-color: #f50057;
+    }
+
+    .chart-container {
+      margin: 40px 0;
+      background-color: #ffffffee;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    canvas {
+      width: 100% !important;
+      max-height: 350px;
+    }
+
+    .average-label {
+      text-align: center;
+      font-size: 1.4em;
+      color: #ff4081;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1em;
+      color: #666;
+    }
+
+    .highlight-bar {
+      box-shadow: 0 0 15px 4px #03a9f4aa !important;
+    }
+
+    .cta-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(45deg, #ff4081, #ff80ab);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-btn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
+  <div class="container">
+    <h1>🌟 Compare Your Progress!</h1>
+
+    <!-- Sleep Chart with Buttons -->
+    <div class="chart-container">
+      <div class="average-label">Sleep Efficiency: Avg = {{ community.sleep.average }}%</div>
+      <canvas id="sleepChart"></canvas>
+      <div style="text-align: center; margin-top: 20px;">
+        <a href="/caffeine-line" class="cta-button">☕ Caffeine vs Sleep Efficiency</a>
+        <a href="/sleep-efficiency-by-duration" class="cta-button">🛌 Sleep Duration Impact</a>
+        <a href="/exercise-line" class="cta-button">💪 Exercise vs Sleep Efficiency</a>
+        <a href="/smoking-line" class="cta-button">🚬 Smoking vs Sleep Efficiency</a>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="average-label">Performance: Avg = {{ community.performance.average }}</div>
+      <canvas id="performanceChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <div class="average-label">Mobile Behavior: Avg = {{ community.behavior.average }}</div>
+      <canvas id="behaviorChart"></canvas>
+    </div>
+
+    <footer>
+      🧠 Keep dreaming big, working hard, and having fun! 🎈
+    </footer>
+  </div>
+
+  <script>
+    const community = {{ community | tojson }};
+    const user = {{ user | tojson }};
+
+    const chartData = [
+      {
+        id: 'sleepChart',
+        label: '😴 Sleep Efficiency (%)',
+        data: [community.sleep.lowest, community.sleep.average, community.sleep.highest, user.sleep],
+        bg: ['#f48fb1', '#ce93d8', '#81d4fa', '#03a9f4'],
+        max: 100
+      },
+      {
+        id: 'performanceChart',
+        label: '📚 Student Performance',
+        data: [community.performance.lowest, community.performance.average, community.performance.highest, user.performance],
+        bg: ['#aed581', '#81c784', '#4db6ac', '#00bcd4'],
+        max: 25
+      },
+      {
+        id: 'behaviorChart',
+        label: '📱 Mobile Behavior Score',
+        data: [community.behavior.lowest, community.behavior.average, community.behavior.highest, user.behavior],
+        bg: ['#ffe082', '#ffca28', '#ffb74d', '#ffa000'],
+        max: 5
+      }
+    ];
+
+    chartData.forEach(({ id, label, data, bg, max }) => {
+      const ctx = document.getElementById(id).getContext('2d');
+      const userIndex = 3;
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['⬇️ Lowest', '🌟 Average', '⬆️ Highest', '🧍 You'],
+          datasets: [{
+            label: label,
+            data: data,
+            backgroundColor: data.map((_, i) => i === userIndex ? bg[i] + 'ee' : bg[i]),
+            borderRadius: 12,
+            hoverOffset: 10
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: true,
+              text: label,
+              font: {
+                size: 20,
+                family: 'Comic Neue'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  return `${ctx.label}: ${ctx.raw}`;
+                }
+              }
+            }
+          },
+          animation: {
+            duration: 1200,
+            easing: 'easeOutBounce'
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              suggestedMax: max,
+              ticks: {
+                color: '#333',
+                stepSize: max <= 10 ? 1 : undefined
+              }
+            },
+            x: {
+              ticks: {
+                color: '#444',
+                font: {
+                  weight: 'bold'
+                }
+              }
+            }
+          }
+        }
+      });
+    });
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+</body>
+</html>

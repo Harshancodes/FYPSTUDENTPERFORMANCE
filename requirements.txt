@@ -6,3 +6,4 @@ pandas
 scikit-learn
 Flask-SQLAlchmey
 Flask-Mail
+openpyxl

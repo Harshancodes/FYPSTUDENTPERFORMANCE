@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Caffeine vs Sleep Efficiency</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #003366;
+      margin-bottom: 20px;
+    }
+
+    #chart-container {
+      width: 90%;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>☕ Caffeine Consumption vs Sleep Efficiency 🛌</h1>
+
+  <div id="chart-container">
+    <canvas id="caffeineChart"></canvas>
+  </div>
+
+  <script>
+    const caffeineLevels = {{ caffeine_levels | tojson }};
+    const avgEfficiencies = {{ avg_efficiencies | tojson }};
+
+    new Chart(document.getElementById('caffeineChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: caffeineLevels,
+        datasets: [{
+          label: 'Avg Sleep Efficiency (0-1)',
+          data: avgEfficiencies,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: 'rgba(0, 0, 0, 0.8)',
+          pointRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Trend: Caffeine Intake vs Sleep Efficiency',
+            font: { size: 20, weight: 'bold' },
+            color: '#333'
+          },
+          legend: {
+            labels: {
+              color: '#333',
+              font: { size: 14 }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 1,
+            title: {
+              display: true,
+              text: 'Sleep Efficiency (0 - 1)',
+              color: '#333',
+              font: { size: 16 }
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Caffeine Consumption (mg)',
+              color: '#333',
+              font: { size: 16 }
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

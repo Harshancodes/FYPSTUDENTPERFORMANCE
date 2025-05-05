@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sleep Duration vs Efficiency</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+      font-family: 'Comic Sans MS', cursive;
+      color: #333;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.4em;
+      color: #4b0082;
+      margin-bottom: 20px;
+    }
+
+    #chart-container {
+      width: 95%;
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛌 Sleep Duration vs Sleep Efficiency 📊</h1>
+  <div id="chart-container">
+    <canvas id="sleepChart"></canvas>
+  </div>
+
+  <script>
+    const labels = {{ labels | tojson }};
+    const durations = {{ durations | tojson }};
+    const efficiencies = {{ efficiencies | tojson }};
+
+    new Chart(document.getElementById('sleepChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Sleep Duration (hrs)',
+            data: durations,
+            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            tension: 0.4,
+            fill: true,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Sleep Efficiency (%)',
+            data: efficiencies,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            tension: 0.4,
+            fill: true,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: '#333',
+              font: {
+                size: 14
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: '📈 Sleep Comparison Chart',
+            font: {
+              size: 20,
+              weight: 'bold'
+            },
+            color: '#222'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Values',
+              color: '#444'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Students',
+              color: '#444'
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

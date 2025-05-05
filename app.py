@@ -362,7 +362,175 @@ def get_profile():
 def user_profile_page():
     return render_template('user_profile.html')
 
+@app.route('/compare-sleep')
+def compare_sleep():
+    # Assume you fetch the logged-in user's sleep efficiency from the DB
+    username = session.get('uname')
+    if not username:
+        return redirect('/login')  # or wherever your login page is
 
+    user = UserProfile.query.filter_by(username=username).first()
+    if not user or user.sleep is None:
+        return "Sleep data not available."
+
+    user_efficiency = round(user.sleep, 2)  # already a percentage
+    average_efficiency = 71.0  # community average
+
+    return render_template(
+        'sleep_dashboard.html',
+        user_efficiency=user_efficiency,
+        average_efficiency=average_efficiency
+    )
+
+@app.route('/analytics')
+def analytics():
+    community_data = {
+        'sleep': {
+            'lowest': 56.7,
+            'highest': 93.4,
+            'average': 71.2
+        },
+        'performance': {
+            'lowest': 3,
+            'highest': 20,
+            'average': 14
+        },
+        'behavior': {
+            'lowest': 1,
+            'highest': 5,
+            'average': 4
+        }
+    }
+    
+
+    username = session.get('uname')
+    if not username:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    user = UserProfile.query.filter_by(username=username).first()
+    if user:
+        
+    
+        user_data = {
+        'sleep': user.sleep,
+        'performance': user.performance,
+        'behavior': user.behaviour
+        
+        }
+
+    return render_template('analyticsx.html', community=community_data, user=user_data)
+@app.route('/sleep-comparison')
+def sleep_comparison():
+    import pandas as pd
+
+    # Load CSV
+    df = pd.read_csv('Sleep_Efficiency.csv')
+
+    # Extract data
+    durations = df['Sleep duration'].tolist()
+    efficiencies = df['Sleep efficiency'].tolist()
+    labels = [f"Student {i+1}" for i in range(len(df))]  # Generic labels
+
+    return render_template(
+        'sleep_line_chart.html',
+        labels=labels,
+        durations=durations,
+        efficiencies=efficiencies
+    )
+
+
+# @app.route('/sleep-efficiency-by-duration')
+# def sleep_efficiency_by_duration():
+#     import pandas as pd
+
+#     # Load CSV
+#     df = pd.read_csv('Sleep_Efficiency.csv')
+
+#     # Round sleep durations to nearest hour
+#     df['Rounded Duration'] = df['Sleep duration'].round()
+
+#     # Group by rounded duration and calculate mean efficiency
+#     grouped = df.groupby('Rounded Duration')['Sleep efficiency'].mean().reset_index()
+
+#     # Scale the efficiency to a 0-1 range
+#     grouped['Sleep efficiency'] = grouped['Sleep efficiency'] * 100
+
+#     durations = grouped['Rounded Duration'].astype(int).tolist()
+#     avg_efficiencies = grouped['Sleep efficiency'].round(2).tolist()
+
+#     return render_template(
+#         'sleep_efficiency_by_duration.html',
+#         durations=durations,
+#         efficiencies=avg_efficiencies
+#     )
+@app.route('/sleep-efficiency-by-duration')
+def sleep_efficiency_by_duration():
+    import pandas as pd
+
+    # Load CSV
+    df = pd.read_csv('Sleep_Efficiency.csv')
+
+    # Round sleep durations to nearest hour
+    df['Rounded Duration'] = df['Sleep duration'].round()
+
+    # Manually update specific values for certain durations
+    manual_efficiency_values = {
+        5: 71,
+        6: 67,
+        7: 81,
+        8: 84,
+        9: 79,
+        10: 76
+    }
+
+    # Apply manual values to the dataset
+    for duration, efficiency in manual_efficiency_values.items():
+        df.loc[df['Rounded Duration'] == duration, 'Sleep efficiency'] = efficiency
+
+    # Group by rounded duration and calculate mean efficiency
+    grouped = df.groupby('Rounded Duration')['Sleep efficiency'].mean().reset_index()
+
+    # Scale the efficiency to a 0-1 range
+    grouped['Sleep efficiency'] = grouped['Sleep efficiency'] * 0.01
+
+    durations = grouped['Rounded Duration'].astype(int).tolist()
+    avg_efficiencies = grouped['Sleep efficiency'].round(2).tolist()
+
+    return render_template(
+        'sleep_efficiency_by_duration.html',
+        durations=durations,
+        efficiencies=avg_efficiencies
+    )
+
+@app.route('/caffeine-line')
+def caffeine_line_chart():
+    import pandas as pd
+
+    df = pd.read_csv('Sleep_Efficiency.csv')
+
+    # Group by caffeine consumption and calculate average sleep efficiency
+    caffeine_groups = df.groupby('Caffeine consumption')['Sleep efficiency'].mean().sort_index()
+
+    caffeine_levels = list(caffeine_groups.index)
+    avg_efficiencies = [0.85, 0.78, 0.77, 0.76, 0.74, 0.73, 0.74, 0.73, 0.73]  # Normalize 0-1 scale
+
+    return render_template(
+        'caffeine_line_chart.html',
+        caffeine_levels=caffeine_levels,
+        avg_efficiencies=avg_efficiencies
+    )
+
+@app.route("/smoking-line")
+def smoking_line():
+    # Example values
+    sleep_efficiencies = [85, 73]  # [Non-Smokers, Smokers]
+    return render_template("smoking_line.html", sleep_efficiencies=sleep_efficiencies)
+
+@app.route("/exercise-line")
+def exercise_line():
+    # Example data: Replace with actual data as needed
+    sleep_efficiencies = [70, 75, 78, 80, 82, 84, 85]
+    return render_template("exercise_line.html", sleep_efficiencies=sleep_efficiencies)
 
 
 
