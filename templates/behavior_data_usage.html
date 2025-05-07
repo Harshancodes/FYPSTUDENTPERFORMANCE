@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📱 Behavior vs Data Usage</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Comic Neue', cursive;
+      background: linear-gradient(to right, #E1F5FE, #FFFDE7);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #ffffffdd;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.6em;
+      color: #0077c2;
+      margin-bottom: 30px;
+    }
+
+    canvas {
+      background: #f1f8e9;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 1em;
+      margin-top: 30px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📈 User Behavior vs Data Usage</h1>
+    <canvas id="behaviorChart"></canvas>
+    <footer>🧠 Smarter usage starts with smarter behavior!</footer>
+  </div>
+
+  <script>
+    const data = {{ behavior_data | tojson }};
+    const ctx = document.getElementById('behaviorChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: 'Average Data Usage (MB)',
+          data: data.usage,
+          fill: true,
+          tension: 0.4,
+          backgroundColor: 'rgba(129, 212, 250, 0.2)',
+          borderColor: '#0288d1',
+          pointBackgroundColor: '#0288d1',
+          pointBorderColor: '#fff',
+          pointRadius: 6,
+          pointHoverRadius: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true },
+          title: {
+            display: true,
+            text: 'Average Mobile Data Usage per Behavior Score',
+            font: {
+              size: 18,
+              family: 'Comic Neue'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => `Score ${ctx.label}: ${ctx.raw} MB`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'MB Used',
+              color: '#333',
+              font: { size: 14 }
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'User Behavior Score',
+              color: '#333',
+              font: { size: 14 }
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

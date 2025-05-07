@@ -532,6 +532,86 @@ def exercise_line():
     sleep_efficiencies = [70, 75, 78, 80, 82, 84, 85]
     return render_template("exercise_line.html", sleep_efficiencies=sleep_efficiencies)
 
+@app.route("/performance_chart")
+def performance_chart():
+    # Average marks corresponding to hours studied (1 to 4 hours)
+    hours = [1, 2, 3, 4]
+    avg_marks = [12.2, 13.6, 16.7, 15.1]
+
+    return render_template("performance_chart_marks.html", hours=hours, marks=avg_marks)
+
+@app.route("/free_time_vs_marks")
+def free_time_vs_marks():
+    # You can either fetch this data from a database or set it statically
+    free_time_data = {
+        'labels': ['1 hour', '2 hours', '3 hours', '4 hours'],
+        'marks': [14.6, 17.1, 13.2, 11.6]
+    }
+    return render_template('free_time_vs_marks.html', free_time_data=free_time_data)
+
+@app.route("/travel_time_vs_marks")
+def travel_time_vs_marks():
+    travel_time_data = {
+        'labels': ['1 hour', '2 hours', '3 hours', '4 hours'],
+        'marks': [16, 14, 12, 11]
+    }
+    return render_template('travel_time_vs_marks.html', travel_time_data=travel_time_data)
+
+@app.route('/analytics/health-marks')
+def health_marks_chart():
+    health_data = {
+        'labels': ['Very Healthy', 'Healthy', 'Minor Issues', 'Poor', 'Very Poor'],
+        'marks': [14, 13, 16, 11, 4]
+    }
+    return render_template('health_marks.html', health_data=health_data)
+
+@app.route('/analytics/activities-marks')
+def activities_marks_chart():
+    activities_data = {
+        'labels': ['No Activities', 'Few Activities', 'Regular', 'Very Active'],
+        'marks': [12, 11, 17, 15]
+    }
+    return render_template('activities_marks.html', activities_data=activities_data)
+
+@app.route('/analytics/failure-marks')
+def failure_marks_chart():
+    failure_data = {
+        'labels': ['Failed Students', 'Non-Failed Students'],
+        'marks': [15, 13]
+    }
+    return render_template('failure_marks.html', failure_data=failure_data)
+
+@app.route('/analytics/user-behavior-data-usage')
+def behavior_data_usage_chart():
+    behavior_data = {
+        'labels': ['1', '2', '3', '4', '5'],
+        'usage': [200, 316, 600, 1800, 3235]
+    }
+    return render_template('behavior_data_usage.html', behavior_data=behavior_data)
+
+@app.route('/analytics/user-behavior-screen-time')
+def behavior_screen_time_chart():
+    screen_time_data = {
+        'labels': ['1', '2', '3', '4', '5'],
+        'screen_time': [2, 3.6, 5.8, 8.9,13]
+    }
+    return render_template('behavior_screen_time.html', screen_time_data=screen_time_data)
+
+@app.route('/analytics/behavior-apps-installed')
+def behavior_apps_chart():
+    apps_data = {
+        'labels': ['1', '2', '3', '4', '5'],
+        'apps_installed': [21, 37, 76, 112, 91]
+    }
+    return render_template('behavior_apps_chart.html', apps_data=apps_data)
+
+@app.route('/analytics/behavior-app-usage')
+def behavior_app_usage_chart():
+    usage_data = {
+        'labels': ['1', '2', '3', '4', '5'],
+        'app_usage': [0.8, 2.1, 5.2, 7.6, 11.2]  # in hours
+    }
+    return render_template('behavior_app_usage_chart.html', usage_data=usage_data)
 
 
 if __name__=="__main__":

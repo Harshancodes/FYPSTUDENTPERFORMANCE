@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌌 Travel Time vs Marks</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+  <style>
+    /* Dark Blue Background with Kid-Friendly Theme */
+    body {
+      font-family: 'Comic Neue', cursive;
+      background: linear-gradient(to bottom right, #0D47A1, #1565C0);
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .dark-mode {
+      background: #121212;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px;
+      background: rgba(0, 0, 139, 0.7); /* Dark Blue with transparency */
+      border-radius: 15px;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff4081;
+      font-size: 3em;
+      margin-bottom: 20px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    .toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff4081;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      background-color: #f50057;
+    }
+
+    .chart-container {
+      margin: 40px 0;
+      background-color: rgba(255, 255, 255, 0.6); /* Light background for contrast */
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    canvas {
+      width: 100% !important;
+      max-height: 400px;
+      background: #000;
+      border-radius: 15px;
+    }
+
+    .average-label {
+      text-align: center;
+      font-size: 1.4em;
+      color: #ff4081;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1em;
+      color: #ccc;
+    }
+
+    .cta-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(45deg, #ff4081, #ff80ab);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-btn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
+  <div class="container">
+    <h1>🚀 Travel Time vs Marks Analytics</h1>
+
+    <!-- Travel Time vs Marks Line Chart -->
+    <div class="chart-container">
+      <div class="average-label">🕒 Travel Time vs Marks</div>
+      <canvas id="travelTimeChart"></canvas>
+    </div>
+
+    <footer>
+      🌠 Keep reaching for the stars! 🌌
+    </footer>
+  </div>
+
+  <script>
+    // Access the data passed from Flask
+    const travelTimeData = {{ travel_time_data | tojson }};
+
+    const travelTimeCtx = document.getElementById('travelTimeChart').getContext('2d');
+    
+    const gradient = travelTimeCtx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(255, 64, 129, 0.7)');
+    gradient.addColorStop(1, 'rgba(0, 188, 212, 0.6)');
+    
+    new Chart(travelTimeCtx, {
+      type: 'line',
+      data: {
+        labels: travelTimeData.labels,
+        datasets: [{
+          label: '📈 Average Marks',
+          data: travelTimeData.marks,
+          borderColor: '#ff4081',
+          backgroundColor: gradient,
+          fill: true,
+          tension: 0.4,
+          borderWidth: 4,
+          pointRadius: 6,
+          pointBackgroundColor: '#ff4081',
+          pointBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'How Travel Time Affects Marks',
+            font: {
+              size: 20,
+              family: 'Comic Neue'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                return `${ctx.label}: ${ctx.raw} marks`;
+              }
+            }
+          }
+        },
+        animation: {
+          duration: 1500,
+          easing: 'easeOutQuart'
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 20,
+            ticks: {
+              stepSize: 2
+            }
+          },
+          x: {
+            ticks: {
+              font: {
+                weight: 'bold'
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Toggle Dark Mode Function
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+</body>
+</html>
