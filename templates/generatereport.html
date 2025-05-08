@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📄 Your Personalized Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #f6f9fc, #d4e2f2);
+      font-family: 'Rubik', sans-serif;
+      padding: 30px;
+    }
+    .container-report {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      max-width: 960px;
+      margin: auto;
+    }
+    .section {
+      margin-bottom: 35px;
+    }
+    .section h4 {
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .highlight {
+      background: #f1f6fd;
+      padding: 25px;
+      border-left: 5px solid #007bff;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .btn-download {
+      display: block;
+      margin: 50px auto 0;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 16px 36px;
+      border-radius: 40px;
+      font-size: 1.1rem;
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+      transition: transform 0.3s;
+    }
+    .btn-download:hover {
+      transform: scale(1.08);
+    }
+    ul {
+      margin-bottom: 0;
+    }
+    .badge-score {
+      font-size: 1rem;
+      background: #e9f7ef;
+      color: #28a745;
+      padding: 5px 10px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="report" class="container-report">
+    <div class="text-center mb-5">
+      <h1 class="display-5">📊 Insightful Report</h1>
+      <p class="text-muted">A data-driven analysis of your academic, behavioral, and sleep metrics</p>
+    </div>
+
+    <div class="section">
+      <h4>👤 Username</h4>
+      <p id="username">Loading...</p>
+    </div>
+
+    <div class="section">
+      <h4>📈 Academic Performance <span id="performance-badge" class="badge-score ms-2"></span></h4>
+      <p id="performance">Loading...</p>
+    </div>
+
+    <div class="section">
+      <h4>💤 Sleep Efficiency <span id="sleep-badge" class="badge-score ms-2"></span></h4>
+      <p id="sleep">Loading...</p>
+    </div>
+
+    <div class="section">
+      <h4>📱 Mobile Behavior</h4>
+      <p id="behaviour">Loading...</p>
+    </div>
+
+    <div class="section highlight">
+      <h4>🔍 In-depth Analysis: Strengths & Weaknesses</h4>
+      <p id="insights">Generating personalized insights...</p>
+    </div>
+  </div>
+
+  <button class="btn-download" onclick="downloadPDF()">⬇️ Download Your Personalized PDF Report</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+    window.onload = () => {
+      fetch('/api/profile')
+        .then(res => res.json())
+        .then(data => {
+          const perf = data.performance ?? 0;
+          const sleep = data.sleep ?? 0;
+          const behaviour = data.behaviour ?? 'Unknown';
+          const username = data.username ?? 'User';
+
+          document.getElementById('username').textContent = username;
+          document.getElementById('performance').textContent = `${perf}%`;
+          document.getElementById('sleep').textContent = `${sleep}%`;
+          document.getElementById('behaviour').textContent = behaviour;
+
+          // Badges
+          document.getElementById('performance-badge').textContent = perf >= 16 ? 'Excellent' : perf >= 12 ? 'Average' : 'Needs Work';
+          document.getElementById('sleep-badge').textContent = sleep >= 75 ? 'Well Rested' : sleep >= 60 ? 'Moderate' : 'Sleep-Deprived';
+
+          // Insight logic
+          let strengths = [], weaknesses = [];
+
+          // Academic
+          if (perf >= 16) strengths.push("You're academically strong and consistent in studies.");
+          else weaknesses.push("You may need to focus more on academics and set study goals.");
+
+          // Sleep
+          if (sleep >= 75) strengths.push("Your sleep habits are excellent, which aids memory and focus.");
+          else if (sleep >= 60) strengths.push("You're getting a fair amount of sleep, but there's room to optimize.");
+          else weaknesses.push("Low sleep efficiency may be affecting your alertness and retention.");
+
+          // Mobile Behavior
+          if (behaviour.includes(1) || behaviour.includes(2)) {
+            strengths.push("Your mobile phone usage is healthy and balanced.");
+          } else {
+            weaknesses.push("Excessive screen time might be distracting or reducing sleep quality.");
+          }
+
+          let insights = "<strong>✅ Strengths:</strong><ul>" + strengths.map(s => `<li>${s}</li>`).join("") + "</ul>";
+          insights += "<strong>⚠️ Weaknesses:</strong><ul>" + weaknesses.map(w => `<li>${w}</li>`).join("") + "</ul>";
+
+          document.getElementById('insights').innerHTML = insights;
+        });
+    };
+
+    function downloadPDF() {
+      const element = document.getElementById('report');
+      html2pdf().from(element).set({
+        margin: 0.5,
+        filename: 'Personalized_Insight_Report.pdf',
+        html2canvas: { scale: 2 },
+        jsPDF: { orientation: 'portrait', unit: 'in', format: 'letter' }
+      }).save();
+    }
+  </script>
+</body>
+</html>

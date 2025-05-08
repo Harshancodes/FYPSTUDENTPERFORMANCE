@@ -5,6 +5,7 @@
   <title>🌈 Fun Student Analytics</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <style>
     body {
       font-family: 'Comic Neue', cursive;
@@ -31,6 +32,7 @@
       color: #ff4081;
       font-size: 2.8em;
       margin-bottom: 20px;
+      animation: bounceInDown 1s;
     }
 
     .toggle-btn {
@@ -46,6 +48,7 @@
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s ease;
+      animation: fadeInRight 1s;
     }
 
     .toggle-btn:hover {
@@ -58,6 +61,7 @@
       padding: 25px;
       border-radius: 20px;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      animation: fadeInUp 1s;
     }
 
     canvas {
@@ -70,6 +74,7 @@
       font-size: 1.4em;
       color: #ff4081;
       margin-top: 10px;
+      animation: pulse 2s infinite;
     }
 
     footer {
@@ -77,10 +82,7 @@
       margin-top: 30px;
       font-size: 1em;
       color: #666;
-    }
-
-    .highlight-bar {
-      box-shadow: 0 0 15px 4px #03a9f4aa !important;
+      animation: fadeInUp 2s;
     }
 
     .cta-button {
@@ -104,26 +106,48 @@
     }
 
     @keyframes pulseGlow {
-      0% {
-        box-shadow: 0 0 10px #ff80ab;
-      }
-      50% {
-        box-shadow: 0 0 20px #ff80ab, 0 0 30px #ff4081;
-      }
-      100% {
-        box-shadow: 0 0 10px #ff80ab;
-      }
+      0% { box-shadow: 0 0 10px #ff80ab; }
+      50% { box-shadow: 0 0 20px #ff80ab, 0 0 30px #ff4081; }
+      100% { box-shadow: 0 0 10px #ff80ab; }
     }
+
+    .sexy-button {
+  background: linear-gradient(135deg, #8e2de2, #4a00e0);
+  color: white;
+  padding: 14px 30px;
+  font-size: 1.2em;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  text-decoration: none;
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+  transition: all 0.3s ease;
+  animation: floaty 3s infinite ease-in-out;
+  display: inline-block;
+}
+
+.sexy-button:hover {
+  background: linear-gradient(135deg, #4a00e0, #8e2de2);
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(138, 43, 226, 0.8);
+}
+
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
   </style>
 </head>
 <body>
-  <button class="toggle-btn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+  <button class="toggle-btn animate__animated animate__fadeInRight" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 
   <div class="container">
-    <h1>🌟 Compare Your Progress!</h1>
+    <h1 class="animate__animated animate__bounceInDown">🌟 Compare Your Progress!</h1>
 
     <!-- Sleep Chart -->
-    <div class="chart-container">
+    <div class="chart-container animate__animated animate__fadeInUp">
       <div class="average-label">Sleep Efficiency: Avg = {{ community.sleep.average }}%</div>
       <canvas id="sleepChart"></canvas>
       <div style="text-align: center; margin-top: 20px;">
@@ -135,35 +159,32 @@
     </div>
 
     <!-- Performance Chart -->
-    <div class="chart-container">
+    <div class="chart-container animate__animated animate__fadeInUp animate__delay-1s">
       <div class="average-label">Performance: Avg = {{ community.performance.average }}</div>
       <canvas id="performanceChart"></canvas>
       <div style="text-align: center; margin-top: 20px;">
-        <a href="/performance_chart" class="cta-button">📊 Makrs vs Study hours</a>
-        <a href="/free_time_vs_marks" class="cta-button">📊 Makrs vs Free hours</a>
-        <a href="/travel_time_vs_marks" class="cta-button">📊 Makrs vs Travel hours</a>
-        <a href="/analytics/health-marks" class="cta-button">📊 Makrs vs Health</a>
-        <a href="/analytics/activities-marks" class="cta-button">📊 Makrs vs Activities</a>
-        <a href="/analytics/failure-marks" class="cta-button">📊 Makrs vs failures</a>
+        <a href="/performance_chart" class="cta-button">📊 Marks vs Study hours</a>
+        <a href="/free_time_vs_marks" class="cta-button">📊 Marks vs Free hours</a>
+        <a href="/travel_time_vs_marks" class="cta-button">📊 Marks vs Travel hours</a>
+        <a href="/analytics/health-marks" class="cta-button">📊 Marks vs Health</a>
+        <a href="/analytics/activities-marks" class="cta-button">📊 Marks vs Activities</a>
+        <a href="/analytics/failure-marks" class="cta-button">📊 Marks vs Failures</a>
       </div>
     </div>
 
     <!-- Behavior Chart -->
-    <div class="chart-container">
+    <div class="chart-container animate__animated animate__fadeInUp animate__delay-2s">
       <div class="average-label">Mobile Behavior: Avg = {{ community.behavior.average }}</div>
       <canvas id="behaviorChart"></canvas>
       <div style="text-align: center; margin-top: 20px;">
         <a href="/analytics/user-behavior-data-usage" class="cta-button">📊 Behaviour vs Data Usage</a>
-        
         <a href="/analytics/user-behavior-screen-time" class="cta-button">📊 Behaviour vs Screen Time</a>
-        
         <a href="/analytics/behavior-apps-installed" class="cta-button">📊 Behaviour vs Apps Installed</a>
-        
         <a href="/analytics/behavior-app-usage" class="cta-button">📊 Behaviour vs App Usage</a>
       </div>
     </div>
 
-    <footer>
+    <footer class="animate__animated animate__fadeInUp animate__delay-3s">
       🧠 Keep dreaming big, working hard, and having fun! 🎉✨
     </footer>
   </div>
@@ -233,7 +254,7 @@
             }
           },
           animation: {
-            duration: 1200,
+            duration: 1500,
             easing: 'easeOutBounce'
           },
           scales: {
@@ -262,5 +283,9 @@
       document.body.classList.toggle('dark-mode');
     }
   </script>
+  <div style="text-align: center; margin-top: 40px;">
+    <a href="/advanced-analytics" class="sexy-button">🔮 Explore Advanced Analytics</a>
+  </div>
+  
 </body>
 </html>

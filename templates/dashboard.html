@@ -11,9 +11,9 @@
       --text-light: #333;
       --card-bg-light: rgba(255, 255, 255, 0.6);
 
-      --bg-dark: #1e1e2f;
-      --text-dark: #f1f1f1;
-      --card-bg-dark: rgba(40, 40, 60, 0.6);
+      --bg-dark: #121212;
+      --text-dark: #e0e0e0;
+      --card-bg-dark: rgba(40, 40, 60, 0.8);
     }
 
     body {
@@ -22,8 +22,14 @@
       background: linear-gradient(-45deg, #d3cce3, #e9e4f0, #a1c4fd, #c2e9fb);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
-      transition: 0.4s;
+      transition: background 0.4s ease, color 0.4s ease;
       overflow-x: hidden;
+      color: var(--text-light);
+    }
+
+    body.dark {
+      background: linear-gradient(-45deg, #1f1c2c, #2c3e50, #1a2a6c, #000000);
+      color: var(--text-dark);
     }
 
     @keyframes gradientBG {
@@ -35,19 +41,20 @@
     .main {
       padding: 40px 20px;
       text-align: center;
-      color: var(--text-light);
-    }
-
-    body.dark .main {
-      color: var(--text-dark);
     }
 
     .dark-toggle {
       position: fixed;
       top: 20px;
       right: 20px;
-      font-size: 20px;
+      font-size: 24px;
       cursor: pointer;
+      z-index: 999;
+      transition: transform 0.3s ease;
+    }
+
+    .dark-toggle:hover {
+      transform: rotate(20deg) scale(1.1);
     }
 
     .grid {
@@ -70,11 +77,12 @@
 
     body.dark .card {
       background: var(--card-bg-dark);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     }
 
     .card:hover {
       transform: translateY(-8px) scale(1.05);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
     }
 
     .card i {
@@ -103,23 +111,13 @@
     }
 
     @keyframes floatIn {
-      0% {
-        transform: translateY(-30px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      0% { transform: translateY(-30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
     }
 
     @keyframes pulse {
-      0%, 100% {
-        text-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
-      }
-      50% {
-        text-shadow: 0 0 20px rgba(102, 126, 234, 1);
-      }
+      0%, 100% { text-shadow: 0 0 10px rgba(102, 126, 234, 0.6); }
+      50% { text-shadow: 0 0 20px rgba(102, 126, 234, 1); }
     }
 
     .motivational-quote {
@@ -153,12 +151,8 @@
     }
 
     @keyframes float {
-      0%, 100% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-15px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
   </style>
 </head>
@@ -172,50 +166,34 @@
     <p class="motivational-quote">"Success is the sum of small efforts, repeated day in and day out." 💡</p>
 
     <div class="grid">
-      <a href="/home">
-        <div class="card"><i class="fas fa-sign-in-alt"></i><p>Login</p></div>
-      </a>
-      <a href="/home">
-        <div class="card"><i class="fas fa-user-plus"></i><p>Signup</p></div>
-      </a>
-      <a href="/dashboard">
-        <div class="card"><i class="fas fa-tachometer-alt"></i><p>Dashboard</p></div>
-      </a>
-      <!-- <a href="/inventory">
-        <div class="card"><i class="fas fa-boxes"></i><p>Inventory</p></div>
-      </a> -->
-      <a href="/analytics">
-        <div class="card"><i class="fas fa-chart-line"></i><p>Analytics</p></div>
-      </a>
-      <a href="/userprofile">
-        <div class="card"><i class="fas fa-user-circle"></i><p>User Profile</p></div>
-      </a>
-      <a href="/userbehavior">
-        <div class="card"><i class="fas fa-brain"></i><p>User Behavior Prediction</p></div>
-      </a>
-      <a href="/predictsleepeffecienct">
-        <div class="card"><i class="fas fa-bed"></i><p>Sleep Efficiency Prediction</p></div>
-      </a>
-      <a href="/pred">
-        <div class="card"><i class="fas fa-pen-nib"></i><p>Student Performance</p></div>
-      </a>
+      <a href="/home"><div class="card"><i class="fas fa-sign-in-alt"></i><p>Login</p></div></a>
+      <a href="/home"><div class="card"><i class="fas fa-user-plus"></i><p>Signup</p></div></a>
+      <a href="/dashboard"><div class="card"><i class="fas fa-tachometer-alt"></i><p>Dashboard</p></div></a>
+      <a href="/analytics"><div class="card"><i class="fas fa-chart-line"></i><p>Analytics</p></div></a>
+      <a href="/userprofile"><div class="card"><i class="fas fa-user-circle"></i><p>User Profile</p></div></a>
+      <a href="/userbehavior"><div class="card"><i class="fas fa-brain"></i><p>User Behavior Prediction</p></div></a>
+      <a href="/predictsleepeffecienct"><div class="card"><i class="fas fa-bed"></i><p>Sleep Efficiency</p></div></a>
+      <a href="/pred"><div class="card"><i class="fas fa-pen-nib"></i><p>Student Performance</p></div></a>
     </div>
   </div>
 
-  <!-- Animated Mascot -->
   <div class="mascot">🤖</div>
 
   <script>
     function toggleDarkMode() {
       document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
     }
 
-    // Simulate user login (set this from login page)
-    // localStorage.setItem("username", "Virat"); // <- Uncomment this line in login flow
+    // Persist dark mode on reload
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark');
+    }
 
-    // Display username if exists
+    // Display username from localStorage
     const username = localStorage.getItem("username") || "Student";
-    document.getElementById("username-display").innerHTML = Hello, <strong>${username}</strong>!;
+    document.getElementById("username-display").innerHTML = `Hello, <strong>${username}</strong>!`;
   </script>
 </body>
 </html>

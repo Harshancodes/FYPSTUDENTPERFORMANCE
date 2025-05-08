@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Advanced Sleep Efficiency Analytics</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Styles -->
+  <style>
+    /* Body Styling */
+    body {
+      background: linear-gradient(45deg, #6a11cb, #2575fc); /* Vibrant Gradient */
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    /* Smooth Fade-In Effect */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Header Styling */
+    h1, h3 {
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255, 123, 123, 0.8), 0 0 25px rgba(255, 123, 123, 0.7);
+      margin-top: 50px;
+    }
+
+    .container {
+      max-width: 80%;
+      margin: 0 auto;
+      padding: 50px;
+      background: rgba(0, 0, 0, 0.7); /* Transparent Background */
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      animation: scaleIn 1s ease-in-out;
+    }
+
+    /* Smooth Scaling Effect */
+    @keyframes scaleIn {
+      from { transform: scale(0.5); }
+      to { transform: scale(1); }
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .form-label {
+      font-size: 1.2rem;
+      color: #ff8c00; /* Orange for form labels */
+    }
+
+    .form-control {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 1px solid #ff8c00;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 15px rgba(255, 140, 0, 0.7);
+      border-color: #ff8c00;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #ff8c00, #ffb74d); /* Orange Gradient */
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 15px 35px;
+      font-size: 1.3rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+      background: linear-gradient(45deg, #ffb74d, #ff8c00); /* Reverse Gradient on Hover */
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 140, 0, 0.7);
+    }
+
+    /* Chart Styling */
+    #efficiencyChart {
+      max-width: 100%;
+      height: 400px;
+      margin-top: 50px;
+      border-radius: 10px;
+      transition: opacity 1s ease-in-out;
+    }
+
+    /* Footer Styling */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    /* Input Field Hover Effect */
+    .form-control:hover {
+      border-color: #ff8c00;
+    }
+
+    /* Glowing Text Effect */
+    .glow {
+      text-shadow: 0 0 20px rgba(255, 123, 123, 0.8), 0 0 30px rgba(255, 123, 123, 0.7);
+    }
+
+    /* Card Shadow */
+    .card {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Analytic Statement Styling */
+    .analytic-statement {
+      font-size: 1.4rem;
+      color: #28a745; /* Green color for positive feedback */
+      font-weight: bold;
+      margin-top: 30px;
+      text-shadow: 0 0 10px rgba(40, 167, 69, 0.8);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .analytic-statement:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+      color: #218838; /* Darker green on hover */
+      text-shadow: 0 0 15px rgba(40, 167, 69, 1);
+    }
+
+    /* Back Button */
+    .back-btn {
+      margin-top: 30px;
+      padding: 10px 30px;
+      background: #ff8c00;
+      color: #fff;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 1.2rem;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #ffb74d;
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 140, 0, 0.7);
+    }
+
+  </style>
+
+  <!-- Google Fonts for Gaming Theme -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+  <h1 class="glow">Sleep Efficiency Analytics</h1>
+  <h3>Enter Your Sleep Data for the Week</h3>
+
+  <div class="card p-4 mt-4">
+    <form method="post" action="/advanced_sleepanalytics">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="monday" class="form-label">Monday:</label>
+          <input type="number" id="monday" name="monday" class="form-control" min="0" max="100" required>
+        </div>
+        <div class="col-md-4">
+          <label for="tuesday" class="form-label">Tuesday:</label>
+          <input type="number" id="tuesday" name="tuesday" class="form-control" min="0" max="100" required>
+        </div>
+        <div class="col-md-4">
+          <label for="wednesday" class="form-label">Wednesday:</label>
+          <input type="number" id="wednesday" name="wednesday" class="form-control" min="0" max="100" required>
+        </div>
+        <div class="col-md-4">
+          <label for="thursday" class="form-label">Thursday:</label>
+          <input type="number" id="thursday" name="thursday" class="form-control" min="0" max="100" required>
+        </div>
+        <div class="col-md-4">
+          <label for="friday" class="form-label">Friday:</label>
+          <input type="number" id="friday" name="friday" class="form-control" min="0" max="100" required>
+        </div>
+        <div class="col-md-4">
+          <label for="saturday" class="form-label">Saturday:</label>
+          <input type="number" id="saturday" name="saturday" class="form-control" min="0" max="100" required>
+        </div>
+        <div class="col-md-4">
+          <label for="sunday" class="form-label">Sunday:</label>
+          <input type="number" id="sunday" name="sunday" class="form-control" min="0" max="100" required>
+        </div>
+      </div>
+      <button type="submit" class="btn mt-4">Generate Analytics</button>
+    </form>
+    <!-- <div>
+      
+      <a href="/predictsleepeffecienct" class="back-btn">predict for today</a>
+    </div> -->
+  </div>
+
+  <!-- Chart Section (only visible after data submission) -->
+  {% if monday is defined %}
+  <div>
+    <h3>Weekly Sleep Efficiency</h3>
+    <canvas id="efficiencyChart"></canvas>
+    <h4 class="analytic-statement">{{ analytic_statement }}</h4>
+
+    <!-- Back Button -->
+    <a href="/advanced-analytics" class="back-btn">Back to Analytics</a>
+  </div>
+
+  <script>
+    const weeklyLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const weeklyData = [
+      {{ monday }}, {{ tuesday }}, {{ wednesday }}, {{ thursday }},
+      {{ friday }}, {{ saturday }}, {{ sunday }}
+    ];
+
+    const ctx = document.getElementById('efficiencyChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: weeklyLabels,
+        datasets: [{
+          label: 'Sleep Efficiency (%)',
+          data: weeklyData,
+          fill: false,
+          borderColor: '#ff8c00', /* Orange Color */
+          tension: 0.4,
+          borderWidth: 2,
+          pointRadius: 5,
+          pointBackgroundColor: '#ffb74d', /* Light Yellow */
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            min: 0,
+            max: 100,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        }
+      }
+    });
+  </script>
+  {% endif %}
+</div>
+
+<!-- Footer Section -->
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

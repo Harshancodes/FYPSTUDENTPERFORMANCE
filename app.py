@@ -362,6 +362,18 @@ def get_profile():
 def user_profile_page():
     return render_template('user_profile.html')
 
+@app.route('/generate-report')
+def generate_report():
+    return render_template('generatereport.html')
+
+from flask import render_template
+
+@app.route("/advanced-analytics")
+def advanced_analytics():
+    # Pass any data you want from backend here
+    return render_template("advanced_analytics.html")
+
+
 @app.route('/compare-sleep')
 def compare_sleep():
     # Assume you fetch the logged-in user's sleep efficiency from the DB
@@ -613,6 +625,71 @@ def behavior_app_usage_chart():
     }
     return render_template('behavior_app_usage_chart.html', usage_data=usage_data)
 
+
+@app.route('/advanced_sleepanalytics', methods=['GET', 'POST'])
+def advanced_sleepanalytics():
+    # Define default values
+    analytic_statement = ""
+    monday = tuesday = wednesday = thursday = friday = saturday = sunday = 0
+
+    if request.method == 'POST':
+        # Get the data from the form
+        monday = int(request.form['monday'])
+        tuesday = int(request.form['tuesday'])
+        wednesday = int(request.form['wednesday'])
+        thursday = int(request.form['thursday'])
+        friday = int(request.form['friday'])
+        saturday = int(request.form['saturday'])
+        sunday = int(request.form['sunday'])
+
+        # Collect data into a list for easier analysis
+        sleep_efficiency = [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+
+        # Analyze trend
+        if all(x < y for x, y in zip(sleep_efficiency, sleep_efficiency[1:])):
+            analytic_statement = "Your sleep efficiency is appreciating throughout the week!"
+        elif all(x > y for x, y in zip(sleep_efficiency, sleep_efficiency[1:])):
+            analytic_statement = "Your sleep efficiency is deteriorating through the week."
+        elif len(set(sleep_efficiency)) >0.7 and len(set(sleep_efficiency))<=1:
+            analytic_statement = "Your sleep efficiency is consistent across the week."
+        else:
+            analytic_statement = "Your sleep efficiency has varying patterns throughout the week."
+
+    return render_template('advanced_sleepanalytics.html', monday=monday, tuesday=tuesday, wednesday=wednesday,
+                           thursday=thursday, friday=friday, saturday=saturday, sunday=sunday, analytic_statement=analytic_statement)
+
+@app.route("/advanced-performance")
+def advanced_performance():
+    return render_template("advanced_performance.html")
+
+@app.route('/advanced_behavioranalytics', methods=['GET', 'POST'])
+def advanced_behavioranalytics():
+    if request.method == 'POST':
+        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+        values = [int(request.form[day]) for day in days]
+
+        # Determine trend
+        increasing = all(values[i] <= values[i + 1] for i in range(len(values) - 1))
+        decreasing = all(values[i] >= values[i + 1] for i in range(len(values) - 1))
+        consistent = all(abs(values[i] - values[i + 1]) <= 1 for i in range(len(values) - 1))
+
+        if increasing:
+            analytic_statement = "📈 Your phone usage is increasing. Try to reduce your screen time!"
+        elif decreasing:
+            analytic_statement = "✅ Great! Your phone usage is decreasing. Keep up the real-world focus!"
+        elif consistent:
+            analytic_statement = "📊 Your phone usage is consistent. Maintain a healthy balance!"
+        else:
+            analytic_statement = "⚠️ Your usage is fluctuating. Try to build a more consistent routine."
+
+        return render_template(
+            'advanced_behavioranalytics.html',
+            monday=values[0], tuesday=values[1], wednesday=values[2],
+            thursday=values[3], friday=values[4], saturday=values[5], sunday=values[6],
+            analytic_statement=analytic_statement
+        )
+
+    return render_template('advanced_behavioranalytics.html')
 
 if __name__=="__main__":
     app.run(host="0.0.0.0",port=5001,debug=True)

@@ -6,21 +6,21 @@
         font-family: 'Poppins', sans-serif;
         margin: 0;
         padding: 0;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #f9fafb, #e0e0e0);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
     }
 
-    /* NAVBAR — optional if you need to adjust */
+    /* NAVBAR */
     .navbar {
         width: 100%;
-        padding: 15px 30px;
-        background-color: #fff;
+        padding: 20px 40px;
+        background-color: #ffffff;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
         position: sticky;
         top: 0;
         z-index: 1000;
@@ -28,19 +28,21 @@
 
     .navbar h2 {
         margin: 0;
-        color: #333;
+        color: #4a4a4a;
+        font-size: 1.8rem;
     }
 
     .navbar a {
         text-decoration: none;
-        color: #667eea;
+        color: #5b9bff;
         font-weight: bold;
-        margin-left: 20px;
+        margin-left: 25px;
+        font-size: 1.1rem;
         transition: color 0.3s;
     }
 
     .navbar a:hover {
-        color: #764ba2;
+        color: #4775b2;
     }
 
     /* Page container */
@@ -49,15 +51,15 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 40px 20px;
+        padding: 60px 20px;
     }
 
     .container {
-        background: #fff;
-        padding: 30px;
+        background: #ffffff;
+        padding: 40px;
         border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        max-width: 480px;
         width: 100%;
         text-align: center;
         transition: transform 0.3s ease-in-out;
@@ -69,43 +71,50 @@
 
     h1 {
         color: #333;
-        font-size: 24px;
-        margin-bottom: 10px;
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    p {
+        color: #777;
+        font-size: 1rem;
+        margin-bottom: 35px;
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         text-align: left;
     }
 
     .form-group label {
         font-weight: bold;
         color: #555;
+        font-size: 1.1rem;
     }
 
     .form-group input {
         width: 100%;
-        padding: 12px;
+        padding: 15px;
         border: 1px solid #ccc;
         border-radius: 8px;
-        font-size: 14px;
+        font-size: 1rem;
         transition: 0.3s;
     }
 
     .form-group input:focus {
-        border-color: #764ba2;
+        border-color: #5b9bff;
         outline: none;
-        box-shadow: 0 0 8px rgba(118, 75, 162, 0.3);
+        box-shadow: 0 0 8px rgba(91, 155, 255, 0.3);
     }
 
     .btn {
         display: block;
         width: 100%;
-        padding: 12px;
-        margin: 10px 0;
+        padding: 14px;
+        margin: 15px 0;
         border: none;
         border-radius: 8px;
-        font-size: 16px;
+        font-size: 1.2rem;
         font-weight: bold;
         cursor: pointer;
         transition: 0.3s;
@@ -115,11 +124,11 @@
     }
 
     .btn.login {
-        background: #667eea;
+        background: #5b9bff;
     }
 
     .btn.signup {
-        background: #28a745;
+        background: #57d68f;
     }
 
     .btn:hover {
@@ -128,7 +137,7 @@
 
     .divider {
         position: relative;
-        margin: 20px 0;
+        margin: 35px 0;
         font-size: 14px;
         color: #aaa;
     }
@@ -151,40 +160,11 @@
     }
 </style>
 
-<!-- Optional Navbar block if not already in w.html -->
-<!-- <div class="navbar">
-    <h2>Beyond Grades</h2>
-    <div>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-    </div>
-</div> -->
-
 <!-- Page content -->
-<!-- <div class="page-content">
-    <div class="container">
-        <h1>Welcome Back!</h1>
-        <p style="color: #666;">Log in to access your account or sign up to get started.</p>
-        <form>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
-            </div>
-            <a href="/dashboard" class="btn login">Login</a>
-            <div class="divider">OR</div>
-            <a href="/signup" class="btn signup">Sign Up</a>
-        </form>
-    </div>
-</div> -->
 <div class="page-content">
     <div class="container">
         <h1>Welcome Back!</h1>
-        <p style="color: #666;">Log in to access your account or sign up to get started.</p>
+        <p>Log in to access your account or sign up to get started.</p>
 
         <form method="POST" action="/home">
             {% with messages = get_flashed_messages() %}
@@ -212,8 +192,3 @@
 </div>
 
 {% endblock %}
-<!-- <form method="POST">
-    Username: <input type="text" name="username" required><br>
-    Password: <input type="password" name="password" required><br>
-    <input type="submit" value="Login">
-</form> -->
