@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Performance Trend Analyzer</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Rubik', sans-serif;
+      margin: 0;
+      padding: 30px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #1e1e1e;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+    h1 {
+      text-align: center;
+      color: #00d1b2;
+      margin-bottom: 30px;
+    }
+    .inputs {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    input {
+      flex: 1;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background: #2c2c2c;
+      color: #fff;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      background-color: #00d1b2;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #00bfa6;
+    }
+    canvas {
+      margin-top: 40px;
+    }
+    .feedback {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #f5f5f5;
+    }
+    .feedback span {
+      font-weight: bold;
+      color: #00d1b2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>📊 Performance Trend Analyzer</h1>
+
+    <div class="inputs">
+      <input type="number" id="marks1" placeholder="Marks - Test 1" min="0" max="100">
+      <input type="number" id="marks2" placeholder="Marks - Test 2" min="0" max="100">
+      <input type="number" id="marks3" placeholder="Marks - Test 3" min="0" max="100">
+    </div>
+
+    <button onclick="generateChart()">Analyze Performance</button>
+
+    <canvas id="marksChart" height="300"></canvas>
+
+    <div class="feedback" id="feedback">Enter marks to analyze progression...</div>
+  </div>
+
+  <script>
+    let chart;
+
+    function generateChart() {
+      const m1 = parseFloat(document.getElementById('marks1').value) || 0;
+      const m2 = parseFloat(document.getElementById('marks2').value) || 0;
+      const m3 = parseFloat(document.getElementById('marks3').value) || 0;
+
+      if (chart) chart.destroy();
+
+      const ctx = document.getElementById('marksChart').getContext('2d');
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Test 1', 'Test 2', 'Test 3'],
+          datasets: [{
+            label: 'Score',
+            data: [m1, m2, m3],
+            borderColor: '#00d1b2',
+            backgroundColor: 'rgba(0,209,178,0.1)',
+            tension: 0.3,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#00d1b2',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: { color: '#e0e0e0' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#aaa' }
+            },
+            y: {
+              ticks: { color: '#aaa' },
+              beginAtZero: true,
+              suggestedMax: 100
+            }
+          }
+        }
+      });
+
+      const feedback = document.getElementById('feedback');
+      if (m1 < m2 && m2 < m3) {
+        feedback.innerHTML = "✅ <span>Excellent progression!</span> Keep up the momentum!";
+      } else if (m1 > m2 && m2 > m3) {
+        feedback.innerHTML = "⚠️ <span>Performance is decreasing.</span> Consider reviewing weak areas.";
+      } else {
+        feedback.innerHTML = "ℹ️ <span>Inconsistent performance.</span> Try to stabilize your progress.";
+      }
+    }
+  </script>
+
+</body>
+</html>
